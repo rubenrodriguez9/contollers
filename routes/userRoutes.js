@@ -2,7 +2,7 @@ const express = require('express');
 //create a router
 const router = express.Router();
 //users array
-const users = require('../models/usersArray');
+let users = require('../models/usersArray');
 
 // get all users
 router.get('/all-users', (req, res) => {
@@ -69,6 +69,18 @@ router.put('/update-user/:id', (req, res) => {
   });
   //return array of users
   return res.status(200).json({ message: 'User Updates', users });
+});
+
+//delete single user based on id parameter
+router.delete('/delete-user/:id', (req, res) => {
+  //filter user based on id parameter in address
+  let removeUser = users.filter((foundUser) => {
+    return foundUser.id !== req.params.id;
+  });
+  //mutate users array and replace with removeUser array
+  users = removeUser;
+  //return results
+  return res.status(200).json({ confirmation: 'success', users });
 });
 
 module.exports = router;
