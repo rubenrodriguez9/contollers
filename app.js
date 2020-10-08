@@ -21,19 +21,14 @@ let users = [
 ];
 
 app.get('/', (req, res) => {
-  res.status(200).json({ confirmation: 'success', users });
+  return res.status(200).json({ confirmation: 'success', users });
 });
 
 app.get('/user/:id', (req, res) => {
   users.filter((user) => {
-    if (user.id === req.params.id) {
-      return res.status(200).json({ user });
-    } else {
-      return res.status(400).send('User Does Not Exist');
-    }
+    if (user.id === req.params.id)
+      return res.json({ confirmation: 'success', user });
   });
-
-  res.send(req.params.id);
 });
 
 app.listen(port, () => {
