@@ -31,7 +31,9 @@ router.post('/create-user', (req, res) => {
   }
 
   //check if user exists
-  let existingUser = users.filter((user) => user.email === req.body.email);
+  let existingUser = users.filter(
+    (foundUser) => foundUser.email === req.body.email
+  );
   if (existingUser.length) {
     return res.status(400).send('User Already Exists');
   }
@@ -48,6 +50,25 @@ router.post('/create-user', (req, res) => {
   users.push(newUser);
   //return the new user
   return res.status(200).json({ confirmation: 'sucess', newUser });
+});
+
+router.put('/update-user/:id', (req, res) => {
+  //grab the inputted information
+  let updatedUser = req.body;
+
+  //search the users array
+  users.filter((foundUser) => {
+    //find the user
+    if (foundUser.id === req.params.id) {
+      //change values for user if inputted
+      foundUser.name = updatedUser.name ? updatedUser.name : foundUser.name;
+      foundUser.password = updatedUser.password
+        ? updatedUser.password
+        : foundUser.password;
+    }
+  });
+  //return array of users
+  return res.status(200).json({ message: 'User Updates', users });
 });
 
 module.exports = router;
